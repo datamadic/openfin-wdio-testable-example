@@ -62,6 +62,24 @@ describe('Hello OpenFin App testing with webdriver.io', function() {
         
     // })
 
+    it('Switch to Hello OpenFin Main window', () => {
+        switchWindowByTitle("Hello OpenFin");
+        browser.testableScreenshot('Main');
+    });
+
+    it('should execute async JavaScript on the page', () => {
+        browser.setTimeout({ script: 5000 })
+        const result = browser.executeAsync(function(a, b, c, d, done) {
+            // browser context - you may not access client or console
+            setTimeout(() => {
+                done(a + b + c + d)
+            }, 3000);
+        }, 1, 2, 3, 4)
+        // node.js context - client and console are available
+        console.log(result) // outputs: 10
+        assert(result == 10, 'do I get this error message?');
+    });
+
     it('should be able to create a new window in proc and switch to it', () => {
         browser.setTimeout({ script: 5000 })
         const result = browser.executeAsync(function(done) {
@@ -100,10 +118,7 @@ describe('Hello OpenFin App testing with webdriver.io', function() {
     // });
     
 
-    it('Switch to Hello OpenFin Main window', () => {
-        switchWindowByTitle("Hello OpenFin");
-        browser.testableScreenshot('Main');
-    });
+
 
     it('Wait for OpenFin API ready', () => {
         waitForFinDesktop();
